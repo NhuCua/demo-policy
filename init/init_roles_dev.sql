@@ -1,0 +1,23 @@
+-- role for backend
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'app_user') THEN
+CREATE ROLE app_user LOGIN PASSWORD 'abc123';
+END IF;
+END
+$$;
+
+GRANT USAGE ON SCHEMA public TO app_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO app_user;
+
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'web_anon') THEN
+CREATE ROLE web_anon NOLOGIN;
+END IF;
+END
+$$;
+
+GRANT USAGE ON SCHEMA public TO web_anon;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO web_anon;

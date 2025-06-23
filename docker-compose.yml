@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: backend
+    environment:
+      APP_DB_URL: ${APP_DB_URL}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ./.m2:/root/.m2
+      - .:/app
+    command: mvn spring-boot:run
+    depends_on:
+      - postgres
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  flyway:
+    image: flyway/flyway
+    depends_on:
+      - postgres
+    volumes:
+      - ./flyway/sql:/flyway/sql
+    command:
+      [
+        "-url=${APP_DB_URL}",
+        "-user=${POSTGRES_USER}",
+        "-password=${POSTGRES_PASSWORD}",
+        "-cleanDisabled=false",
+        "clean",
+        "migrate"
+      ]
+    networks:
+        - backend
+
+  postgrest:
+    image: postgrest/postgrest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - flyway
+    environment:
+      PGRST_DB_URI: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+      PGRST_DB_ANON_ROLE: "web_anon"
+      PGRST_DB_SCHEMA: "public"
+      PGRST_SERVER_PORT: 3000
+      PGRST_JWT_SECRET: "${PGRST_JWT_SECRET}"
+    networks:
+      - backend
+volumes:
+  pg_data:
+
+networks:
+  backend:
