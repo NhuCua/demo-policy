@@ -11,7 +11,7 @@ public class JwtSessionConfigurer {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public JwtSessionConfigurer(@Qualifier("userDataSource") DataSource userDs) {
+    public JwtSessionConfigurer(@Qualifier("authenticatedDataSource") DataSource userDs) {
         this.jdbcTemplate = new JdbcTemplate(userDs);
     }
 

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.configs;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -6,18 +6,17 @@ import org.springframework.context.annotation.*;
 import javax.sql.DataSource;
 
 @Configuration
-public class UserDataSourceConfig {
-
+public class AuthenticatedDataSourceConfig {
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource")
-    public DataSourceProperties userDataSourceProperties() {
+    public DataSourceProperties authenticatedDataSourceProperties() {
         return new DataSourceProperties();
     }
 
-    @Bean(name = "userDataSource")
+    @Bean(name = "authenticatedDataSource")
     @Primary
-    public DataSource userDataSource() {
-        return userDataSourceProperties().initializeDataSourceBuilder().build();
+    public DataSource authenticatedDataSource() {
+        return authenticatedDataSourceProperties().initializeDataSourceBuilder().build();
     }
 }

@@ -1,11 +1,10 @@
-package com.example.demo;
+package com.example.demo.properties;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "service.datasource")
-public class ServiceDataSourceProperties {
+@ConfigurationProperties(prefix = "admin.datasource")
+public class AdminDataSourceProperties {
 
     private String url;
 

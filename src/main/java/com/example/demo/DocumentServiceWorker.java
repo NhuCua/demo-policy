@@ -12,7 +12,7 @@ public class DocumentServiceWorker {
 
     private final JdbcTemplate serviceJdbc;
 
-    public DocumentServiceWorker(@Qualifier("serviceJdbcTemplate") JdbcTemplate jdbcTemplate) {
+    public DocumentServiceWorker(@Qualifier("adminJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.serviceJdbc = jdbcTemplate;
     }
 
