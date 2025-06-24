@@ -17,3 +17,13 @@ CREATE POLICY access_documents
                  owner_id = current_setting('jwt.claims.user_id', true)
                  AND organization_id = current_setting('jwt.claims.organization_id', true)
                  );
+
+
+
+CREATE POLICY access_documents_admin_user
+  ON documents
+  FOR SELECT
+                 TO admin_user
+                 USING (
+                 current_user = 'admin_user'
+                 );
