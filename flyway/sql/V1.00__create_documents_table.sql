@@ -27,3 +27,22 @@ CREATE POLICY access_documents_admin_user
                  USING (
                  current_user = 'admin_user'
                  );
+
+
+CREATE POLICY access_users_admin_user
+  ON users
+  FOR SELECT
+                 TO admin_user
+                 USING (
+                 current_user = 'admin_user'
+                 );
+
+
+
+CREATE POLICY access_user
+  ON users
+  FOR SELECT
+                 TO app_user
+                 USING (
+                 name = current_setting('jwt.claims.user_id', true)
+                 );
