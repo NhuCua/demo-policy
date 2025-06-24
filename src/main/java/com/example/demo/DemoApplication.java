@@ -18,9 +18,8 @@ public class DemoApplication {
         return args -> {
             String jwtUserId = "user_123";
             String jwtOrgId = "org_456";
-            String jwtRole = "admin";
 
-            sessionConfigurer.setJwtSession(jwtUserId, jwtOrgId, jwtRole);
+            sessionConfigurer.setJwtSession(jwtUserId, jwtOrgId);
 
             System.out.println("List documents:");
             repository.findAll().forEach(doc ->

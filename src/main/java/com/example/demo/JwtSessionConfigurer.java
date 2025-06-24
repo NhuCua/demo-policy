@@ -12,10 +12,9 @@ public class JwtSessionConfigurer {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void setJwtSession(String userId, String orgId, String role) {
+    public void setJwtSession(String userId, String orgId) {
         jdbcTemplate.queryForObject("SELECT set_config('jwt.claims.user_id', ?, false)", String.class, userId);
         jdbcTemplate.queryForObject("SELECT set_config('jwt.claims.organization_id', ?, false)", String.class, orgId);
-        jdbcTemplate.queryForObject("SELECT set_config('jwt.claims.role', ?, false)", String.class, role);
         System.out.println("JWT session config success!");
     }
 }
