@@ -1,15 +1,18 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.sql.DataSource;
 
 @Service
 public class JwtSessionConfigurer {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public JwtSessionConfigurer(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public JwtSessionConfigurer(@Qualifier("userDataSource") DataSource userDs) {
+        this.jdbcTemplate = new JdbcTemplate(userDs);
     }
 
     public void setJwtSession(String userId, String orgId) {

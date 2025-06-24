@@ -11,6 +11,9 @@ services:
       APP_DB_URL: ${APP_DB_URL}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+
+      ADMIN_DB_USER: ${ADMIN_DB_USER}
+      ADMIN_DB_PASSWORD: ${ADMIN_DB_PASSWORD}
     ports:
       - "8080:8080"
       - "5005:5005"
