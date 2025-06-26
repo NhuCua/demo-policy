@@ -9,10 +9,22 @@ CREATE TABLE users (
 
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY access_users
+
+CREATE POLICY access_users_admin_user
+  ON users
+  FOR SELECT
+                 TO admin_user
+                 USING (
+                 current_user = 'admin_user'
+                 );
+
+
+
+
+CREATE POLICY access_user
   ON users
   FOR SELECT
                  TO app_user
                  USING (
-                    true
+                    name = (current_setting('jwt.claims.context', true)::jsonb ->> 'user_id')
                  );

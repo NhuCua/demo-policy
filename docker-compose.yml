@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-
   backend:
     build:
       context: .
@@ -52,8 +51,7 @@ services:
         "-url=${APP_DB_URL}",
         "-user=${POSTGRES_USER}",
         "-password=${POSTGRES_PASSWORD}",
-        "-cleanDisabled=false",
-        "clean",
+#        "clean",
         "migrate"
       ]
     networks:
@@ -62,7 +60,7 @@ services:
   postgrest:
     image: postgrest/postgrest
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - postgres
       - flyway
@@ -70,7 +68,7 @@ services:
       PGRST_DB_URI: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
       PGRST_DB_ANON_ROLE: "web_anon"
       PGRST_DB_SCHEMA: "public"
-      PGRST_SERVER_PORT: 3000
+      PGRST_SERVER_PORT: 3001
       PGRST_JWT_SECRET: "${PGRST_JWT_SECRET}"
     networks:
       - backend

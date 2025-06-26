@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import javax.sql.DataSource;
 
+import com.example.demo.JwtAwareDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,8 +55,9 @@ public class DataSouce1Config {
     @Bean
     public DataSource userDataSource() {
 
-        DriverManagerDataSource dataSource
-                = new DriverManagerDataSource();
+        JwtAwareDataSource dataSource = new JwtAwareDataSource();
+
+
         dataSource.setDriverClassName(
                 Objects.requireNonNull(env.getProperty("jdbc.driverClassName")));
         dataSource.setUrl(env.getProperty("spring.datasource.url"));
