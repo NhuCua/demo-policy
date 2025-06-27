@@ -35,7 +35,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
       - pg_data:/var/lib/postgresql/data
     networks:
       - backend
@@ -51,7 +50,10 @@ services:
         "-url=${APP_DB_URL}",
         "-user=${POSTGRES_USER}",
         "-password=${POSTGRES_PASSWORD}",
-#        "clean",
+        "-placeholders.APP_DB_USER=${APP_DB_USER}",
+        "-placeholders.APP_DB_PASSWORD=${APP_DB_PASSWORD}",
+        "-placeholders.ADMIN_DB_USER=${ADMIN_DB_USER}",
+        "-placeholders.ADMIN_DB_PASSWORD=${ADMIN_DB_PASSWORD}",
         "migrate"
       ]
     networks:
