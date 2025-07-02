@@ -14,6 +14,9 @@ services:
       ADMIN_DB_USER: ${ADMIN_DB_USER}
       ADMIN_DB_PASSWORD: ${ADMIN_DB_PASSWORD}
 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     ports:
       - "8080:8080"
       - "5005:5005"
@@ -27,7 +30,7 @@ services:
       - backend
 
   postgres:
-    image: postgres:15
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -40,41 +43,41 @@ services:
     networks:
       - backend
 
-  flyway:
-    image: flyway/flyway
-    depends_on:
-      - postgres
-    volumes:
-      - ./flyway/sql:/flyway/sql
-    command:
-      [
-        "-url=${APP_DB_URL}",
-        "-user=${POSTGRES_USER}",
-        "-password=${POSTGRES_PASSWORD}",
-        "-placeholders.APP_DB_USER=${APP_DB_USER}",
-        "-placeholders.APP_DB_PASSWORD=${APP_DB_PASSWORD}",
-        "-placeholders.ADMIN_DB_USER=${ADMIN_DB_USER}",
-        "-placeholders.ADMIN_DB_PASSWORD=${ADMIN_DB_PASSWORD}",
-        "migrate"
-      ]
-    networks:
-        - backend
+#  flyway:
+#    image: flyway/flyway
+#    depends_on:
+#      - postgres
+#    volumes:
+#      - ./flyway/sql:/flyway/sql
+#    command:
+#      [
+#        "-url=${APP_DB_URL}",
+#        "-user=${POSTGRES_USER}",
+#        "-password=${POSTGRES_PASSWORD}",
+#        "-placeholders.APP_DB_USER=${APP_DB_USER}",
+#        "-placeholders.APP_DB_PASSWORD=${APP_DB_PASSWORD}",
+#        "-placeholders.ADMIN_DB_USER=${ADMIN_DB_USER}",
+#        "-placeholders.ADMIN_DB_PASSWORD=${ADMIN_DB_PASSWORD}",
+#        "migrate"
+#      ]
+#    networks:
+#        - backend
 
-  postgrest:
-    image: postgrest/postgrest
-    ports:
-      - "3001:3001"
-    depends_on:
-      - postgres
-      - flyway
-    environment:
-      PGRST_DB_URI: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
-      PGRST_DB_ANON_ROLE: "web_anon"
-      PGRST_DB_SCHEMA: "public"
-      PGRST_SERVER_PORT: 3001
-      PGRST_JWT_SECRET: "${PGRST_JWT_SECRET}"
-    networks:
-      - backend
+#  postgrest:
+#    image: postgrest/postgrest
+#    ports:
+#      - "3001:3001"
+#    depends_on:
+#      - postgres
+#      - flyway
+#    environment:
+#      PGRST_DB_URI: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+#      PGRST_DB_ANON_ROLE: "web_anon"
+#      PGRST_DB_SCHEMA: "public"
+#      PGRST_SERVER_PORT: 3001
+#      PGRST_JWT_SECRET: "${PGRST_JWT_SECRET}"
+#    networks:
+#      - backend
 volumes:
   pg_data:
 
