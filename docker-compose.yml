@@ -13,6 +13,7 @@ services:
 
       ADMIN_DB_USER: ${ADMIN_DB_USER}
       ADMIN_DB_PASSWORD: ${ADMIN_DB_PASSWORD}
+
     ports:
       - "8080:8080"
       - "5005:5005"
