@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -20,6 +21,8 @@ import java.util.Map;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+
 @Component
 @ConfigurationProperties(prefix = "spring.datasource")
 public class JwtAwareDataSource extends DriverManagerDataSource {
@@ -28,6 +31,7 @@ public class JwtAwareDataSource extends DriverManagerDataSource {
     private String jwtSecretKey;
 
     @Override
+    @NonNull
     public Connection getConnection() throws SQLException {
         Connection conn = super.getConnection();
         injectJwt(conn);
@@ -35,7 +39,8 @@ public class JwtAwareDataSource extends DriverManagerDataSource {
     }
 
     @Override
-    public Connection getConnection(String username, String password) throws SQLException {
+    @NonNull
+    public Connection getConnection(@NonNull String username,@NonNull String password) throws SQLException {
         Connection conn = super.getConnection(username, password);
         injectJwt(conn);
         return conn;
@@ -51,13 +56,13 @@ public class JwtAwareDataSource extends DriverManagerDataSource {
             return;
         }
         try {
-            Key key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
-            Jws<Claims> jwtClaims =   Jwts.parser()
-                    .setSigningKey(key)
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
+            Jws<Claims> jwtClaims =  Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(jwt);
+                    .parseSignedClaims(jwt);
 
-            Claims claims = jwtClaims.getBody();
+            Claims claims = jwtClaims.getPayload();
 
             Map<String, Object> claimsMap = new HashMap<>(claims);
 
