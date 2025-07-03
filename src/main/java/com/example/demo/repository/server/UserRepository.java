@@ -1,9 +1,8 @@
-package com.example.demo.db1.repository;
+package com.example.demo.repository.server;
 
-import com.example.demo.db1.model.User;
+import com.example.demo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
