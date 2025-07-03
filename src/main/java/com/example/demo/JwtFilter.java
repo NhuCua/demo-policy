@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,18 +19,21 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("Filter threadId: " + Thread.currentThread().getId());
+
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
-            JwtContextHolder.setJwt(jwt);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(null, jwt, null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        System.out.println("JWT Filter: " + authHeader);
 
         try {
             filterChain.doFilter(request, response);
         } finally {
-            JwtContextHolder.clear();
+            SecurityContextHolder.clearContext();
         }
     }
 }

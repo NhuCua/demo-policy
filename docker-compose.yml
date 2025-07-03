@@ -17,6 +17,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+
     ports:
       - "8080:8080"
       - "5005:5005"
