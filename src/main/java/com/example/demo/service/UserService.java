@@ -21,6 +21,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public Integer getUserCount() {
+        return userRepository.getUserCount();
+    }
+
+    public Integer getUserCountService() {
+        return sericeUserRepository.getUserCount();
+    }
+
     public List<User> findAllUserPro() {
         return sericeUserRepository.findAll();
     }
