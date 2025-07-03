@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: backend
     environment:
-      APP_DB_URL: ${APP_DB_URL}
+      POSTGRES_DB_URL: ${POSTGRES_DB_URL}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
 
@@ -56,7 +56,7 @@ services:
 #      - ./flyway/sql:/flyway/sql
 #    command:
 #      [
-#        "-url=${APP_DB_URL}",
+#        "-url=${POSTGRES_DB_URL}",
 #        "-user=${POSTGRES_USER}",
 #        "-password=${POSTGRES_PASSWORD}",
 #        "-placeholders.APP_DB_USER=${APP_DB_USER}",
